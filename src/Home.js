@@ -1,18 +1,47 @@
 import React, { useState, useEffect, Fragment } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
+import queryString from "query-string";
 import MovieCard from "./components/MovieCard";
 
 const Home = () => {
     const [movies, setMovies] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
+    const location = useLocation();
     useEffect(() => {
         const getMovies = async () => {
+            let filteredMovies;
             try {
                 let result = await axios.get(
                     "https://sometimes-maybe-flaky-api.gdshive.io/"
                 );
 
-                setMovies(result.data);
+                const yearQuery = queryString.parse(location.search).year;
+                const genreQuery = queryString.parse(location.search).genre;
+
+                if (!yearQuery || !genreQuery) {
+                    setMovies(result.data);
+                }
+                if (yearQuery) {
+                    filteredMovies = result.data.filter((el) => {
+                        if (
+                            el.productionYear.toString() ===
+                            yearQuery.toString()
+                        ) {
+                            return el;
+                        }
+                    });
+
+                    setMovies(filteredMovies);
+                } else if (genreQuery) {
+                    filteredMovies = result.data.filter((el) => {
+                        if (el.genre === genreQuery) {
+                            return el;
+                        }
+                    });
+
+                    setMovies(filteredMovies);
+                }
             } catch (error) {
                 setErrorMessage(
                     error.message + ", please try refreshing the browser!"
@@ -21,7 +50,7 @@ const Home = () => {
         };
 
         getMovies();
-    }, []);
+    }, [location]);
 
     if (!movies.length) {
         return (
@@ -46,7 +75,6 @@ const Home = () => {
                 {movies.map((movie) => {
                     return <MovieCard key={movie.name} movie={movie} />;
                 })}
-                }
             </div>
         </div>
     );

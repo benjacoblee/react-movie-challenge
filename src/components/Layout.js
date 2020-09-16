@@ -1,7 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Layout = (props) => {
+    const [yearFilters, setYearFilters] = useState([]);
+    const [genreFilters, setGenreFilters] = useState([]);
+    useEffect(() => {
+        try {
+            const getMovies = async () => {
+                let result = await axios.get(
+                    "https://sometimes-maybe-flaky-api.gdshive.io/"
+                );
+
+                const yearFilterArr = [];
+                const genreFilterArr = [];
+
+                result.data.map((el) => {
+                    if (yearFilterArr.indexOf(el.productionYear) === -1) {
+                        yearFilterArr.push(el.productionYear);
+                    }
+                    if (genreFilterArr.indexOf(el.genre) === -1) {
+                        genreFilterArr.push(el.genre);
+                    }
+                });
+
+                setYearFilters(yearFilterArr);
+                setGenreFilters(genreFilterArr);
+            };
+
+            getMovies();
+        } catch (error) {
+            console.log(error.message);
+        }
+    }, []);
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -25,15 +56,34 @@ const Layout = (props) => {
                     id="navbarSupportedContent"
                 >
                     <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active">
-                            <a className="nav-link" href="#">
-                                Home <span className="sr-only">(current)</span>
+                        <li className="nav-item dropdown">
+                            <a
+                                className="nav-link dropdown-toggle"
+                                href="#"
+                                id="navbarDropdown"
+                                role="button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                Filter by Year
                             </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">
-                                Link
-                            </a>
+                            <div
+                                className="dropdown-menu"
+                                aria-labelledby="navbarDropdown"
+                            >
+                                {yearFilters.map((year, index) => {
+                                    return (
+                                        <Link
+                                            key={index}
+                                            to={`/?year=${year}`}
+                                            className="dropdown-item"
+                                        >
+                                            {year}
+                                        </Link>
+                                    );
+                                })}
+                            </div>
                         </li>
                         <li className="nav-item dropdown">
                             <a
@@ -45,49 +95,26 @@ const Layout = (props) => {
                                 aria-haspopup="true"
                                 aria-expanded="false"
                             >
-                                Dropdown
+                                Filter by Genre
                             </a>
                             <div
                                 className="dropdown-menu"
                                 aria-labelledby="navbarDropdown"
                             >
-                                <a className="dropdown-item" href="#">
-                                    Action
-                                </a>
-                                <a className="dropdown-item" href="#">
-                                    Another action
-                                </a>
-                                <div className="dropdown-divider"></div>
-                                <a className="dropdown-item" href="#">
-                                    Something else here
-                                </a>
+                                {genreFilters.map((genre, index) => {
+                                    return (
+                                        <Link
+                                            key={index}
+                                            to={`/?genre=${genre}`}
+                                            className="dropdown-item"
+                                        >
+                                            {genre}
+                                        </Link>
+                                    );
+                                })}
                             </div>
                         </li>
-                        <li className="nav-item">
-                            <a
-                                className="nav-link disabled"
-                                href="#"
-                                tabIndex="-1"
-                                aria-disabled="true"
-                            >
-                                Disabled
-                            </a>
-                        </li>
                     </ul>
-                    <form className="form-inline my-2 my-lg-0">
-                        <input
-                            className="form-control mr-sm-2"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                        />
-                        <button
-                            className="btn btn-outline-success my-2 my-sm-0"
-                            type="submit"
-                        >
-                            Search
-                        </button>
-                    </form>
                 </div>
             </nav>
             <div>{props.children}</div>
