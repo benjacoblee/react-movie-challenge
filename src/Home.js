@@ -10,7 +10,9 @@ const Home = () => {
     const location = useLocation();
     useEffect(() => {
         const getMovies = async () => {
+            setMovies([]);
             let filteredMovies;
+
             try {
                 let result = await axios.get(
                     "https://sometimes-maybe-flaky-api.gdshive.io/"
