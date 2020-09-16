@@ -15,7 +15,7 @@ const Layout = (props) => {
                 const yearFilterArr = [];
                 const genreFilterArr = [];
 
-                result.data.map((el) => {
+                result.data.forEach((el) => {
                     if (yearFilterArr.indexOf(el.productionYear) === -1) {
                         yearFilterArr.push(el.productionYear);
                     }
