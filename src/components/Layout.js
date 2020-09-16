@@ -24,6 +24,9 @@ const Layout = (props) => {
                     }
                 });
 
+                yearFilterArr.sort((a, b) => a - b);
+                genreFilterArr.sort();
+
                 setYearFilters(yearFilterArr);
                 setGenreFilters(genreFilterArr);
             };
