@@ -6,13 +6,7 @@ const MovieCard = ({
 }) => {
     return (
         <div className="col-6 mb-3">
-            <div
-                className="card d-flex justify-content-between"
-                style={{
-                    width: "18rem",
-                    maxHeight: "450px"
-                }}
-            >
+            <div className="card d-flex justify-content-between">
                 <div className="card-body">
                     <h5 className="card-title">{name}</h5>
                     <p className="card-text">{synopsisShort}</p>
