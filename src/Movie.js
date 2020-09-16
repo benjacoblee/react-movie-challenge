@@ -36,9 +36,9 @@ const Movie = () => {
         getMovies();
     }, []);
 
-    function createMarkup(synopsis) {
+    const createMarkup = (synopsis) => {
         return { __html: synopsis };
-    }
+    };
 
     const { name, productionYear, genre, synopsis } = movie;
     if (movieObjEmpty) {
@@ -71,8 +71,6 @@ const Movie = () => {
             </div>
         </div>
     );
-
-    return <div className="container">Movie details go here</div>;
 };
 
 export default Movie;
