@@ -61,9 +61,16 @@ const Movie = () => {
         <div className="container">
             <div className="mt-2">
                 {errorMessage}
-                <h2>{name}</h2>
-                <p>{productionYear}</p>
-                <p>{genre}</p>
+                <h2>
+                    {name}{" "}
+                    <span>
+                        <small className="font-weight-light">
+                            {productionYear}
+                        </small>
+                    </span>
+                </h2>
+
+                <p className="badge badge-pill badge-light">{genre}</p>
                 <div
                     className="mb-5"
                     dangerouslySetInnerHTML={createMarkup(synopsis)}
