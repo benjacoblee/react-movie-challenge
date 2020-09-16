@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const MovieCard = ({
     movie: { name, productionYear, genre, synopsisShort }
@@ -12,15 +13,10 @@ const MovieCard = ({
                     maxHeight: "450px"
                 }}
             >
-                <img
-                    src="https://source.unsplash.com/random/400x200"
-                    className="card-img-top"
-                    alt="..."
-                />
                 <div className="card-body">
                     <h5 className="card-title">{name}</h5>
                     <p className="card-text">{synopsisShort}</p>
-                    <a href="#">Read More</a>
+                    <Link to={`/movies/${name}`}>Read More</Link>
                 </div>
             </div>
         </div>
