@@ -44,6 +44,8 @@ const Home = () => {
 
                     setMovies(filteredMovies);
                 }
+
+                setErrorMessage("");
             } catch (error) {
                 setErrorMessage(
                     error.message + ", please try refreshing the browser!"
@@ -68,18 +70,18 @@ const Home = () => {
                 )}
             </Fragment>
         );
-    }
-
-    return (
-        <div className="container">
-            <div className="row mt-3">
-                {errorMessage}
-                {movies.map((movie) => {
-                    return <MovieCard key={movie.name} movie={movie} />;
-                })}
+    } else {
+        return (
+            <div className="container">
+                <div className="row mt-3">
+                    {errorMessage}
+                    {movies.map((movie) => {
+                        return <MovieCard key={movie.name} movie={movie} />;
+                    })}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 };
 
 export default Home;
