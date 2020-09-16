@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import Layout from "./components/Layout";
 import MovieCard from "./components/MovieCard";
 
 const Home = () => {
@@ -26,7 +25,7 @@ const Home = () => {
 
     if (!movies.length) {
         return (
-            <>
+            <Fragment>
                 {errorMessage ? (
                     <div className="container">
                         <div className="mt-3 text-center ">{errorMessage}</div>
@@ -36,7 +35,7 @@ const Home = () => {
                         Loading movies, please wait..
                     </div>
                 )}
-            </>
+            </Fragment>
         );
     }
 
