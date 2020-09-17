@@ -79,7 +79,7 @@ const Layout = (props) => {
                                     return (
                                         <Link
                                             key={index}
-                                            to={`/?year=${year}`}
+                                            to={`/?productionYear=${year}`}
                                             className="dropdown-item"
                                         >
                                             {year}

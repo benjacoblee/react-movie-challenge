@@ -6,44 +6,17 @@ import MovieCard from "./components/MovieCard";
 
 const Home = () => {
     const [movies, setMovies] = useState([]);
+    const [query, setQuery] = useState({});
     const [errorMessage, setErrorMessage] = useState("");
     const location = useLocation();
     useEffect(() => {
         const getMovies = async () => {
-            setMovies([]);
-            let filteredMovies;
-
             try {
                 let result = await axios.get(
                     "https://sometimes-maybe-flaky-api.gdshive.io/"
                 );
 
-                const yearQuery = queryString.parse(location.search).year;
-                const genreQuery = queryString.parse(location.search).genre;
-
-                if (!yearQuery || !genreQuery) {
-                    setMovies(result.data);
-                }
-                if (yearQuery) {
-                    filteredMovies = result.data.filter((el) => {
-                        if (
-                            el.productionYear.toString() ===
-                            yearQuery.toString()
-                        ) {
-                            return el;
-                        }
-                    });
-
-                    setMovies(filteredMovies);
-                } else if (genreQuery) {
-                    filteredMovies = result.data.filter((el) => {
-                        if (el.genre === genreQuery) {
-                            return el;
-                        }
-                    });
-
-                    setMovies(filteredMovies);
-                }
+                setMovies(result.data);
 
                 setErrorMessage("");
             } catch (error) {
@@ -54,6 +27,10 @@ const Home = () => {
         };
 
         getMovies();
+    }, []);
+
+    useEffect(() => {
+        setQuery(queryString.parse(location.search));
     }, [location]);
 
     if (!movies.length) {
@@ -76,7 +53,23 @@ const Home = () => {
                 <div className="row mt-3">
                     {errorMessage}
                     {movies.map((movie) => {
-                        return <MovieCard key={movie.name} movie={movie} />;
+                        if (Object.keys(query).length !== 0) {
+                            for (let name in query) {
+                                if (
+                                    movie[name].toString() ===
+                                    query[name].toString()
+                                ) {
+                                    return (
+                                        <MovieCard
+                                            key={movie.name}
+                                            movie={movie}
+                                        />
+                                    );
+                                }
+                            }
+                        } else {
+                            return <MovieCard key={movie.name} movie={movie} />;
+                        }
                     })}
                 </div>
             </div>
