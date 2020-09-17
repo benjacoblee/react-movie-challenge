@@ -6,36 +6,28 @@ const Layout = (props) => {
     const [yearFilters, setYearFilters] = useState([]);
     const [genreFilters, setGenreFilters] = useState([]);
     useEffect(() => {
-        try {
-            const getMovies = async () => {
-                let result = await axios.get(
-                    "https://sometimes-maybe-flaky-api.gdshive.io/"
-                );
+        const filteredYears = props.movies.reduce((acc, currVal) => {
+            if (acc.indexOf(currVal.productionYear) === -1) {
+                acc.push(currVal.productionYear);
+            }
+            return acc;
+        }, []);
 
-                const yearFilterArr = [];
-                const genreFilterArr = [];
+        filteredYears.sort((a, b) => a - b);
 
-                result.data.forEach((el) => {
-                    if (yearFilterArr.indexOf(el.productionYear) === -1) {
-                        yearFilterArr.push(el.productionYear);
-                    }
-                    if (genreFilterArr.indexOf(el.genre) === -1) {
-                        genreFilterArr.push(el.genre);
-                    }
-                });
+        const filteredGenres = props.movies.reduce((acc, currVal) => {
+            if (acc.indexOf(currVal.genre) === -1) {
+                acc.push(currVal.genre);
+            }
+            return acc;
+        }, []);
 
-                yearFilterArr.sort((a, b) => a - b);
-                genreFilterArr.sort();
+        filteredGenres.sort();
 
-                setYearFilters(yearFilterArr);
-                setGenreFilters(genreFilterArr);
-            };
+        setYearFilters(filteredYears);
+        setGenreFilters(filteredGenres);
+    }, [props]);
 
-            getMovies();
-        } catch (error) {
-            console.log(error.message);
-        }
-    }, []);
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -59,7 +51,11 @@ const Layout = (props) => {
                     id="navbarSupportedContent"
                 >
                     <ul className="navbar-nav mr-auto">
-                        <li className="nav-item dropdown">
+                        <li
+                            className={`nav-item dropdown ${
+                                yearFilters.length > 0 ? null : "d-none"
+                            }`}
+                        >
                             <a
                                 className="nav-link dropdown-toggle"
                                 href="#"
@@ -88,7 +84,11 @@ const Layout = (props) => {
                                 })}
                             </div>
                         </li>
-                        <li className="nav-item dropdown">
+                        <li
+                            className={`nav-item dropdown ${
+                                genreFilters.length > 0 ? null : "d-none"
+                            }`}
+                        >
                             <a
                                 className="nav-link dropdown-toggle"
                                 href="#"

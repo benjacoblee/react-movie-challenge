@@ -4,7 +4,7 @@ import axios from "axios";
 import queryString from "query-string";
 import MovieCard from "./components/MovieCard";
 
-const Home = () => {
+const Home = (props) => {
     const [movies, setMovies] = useState([]);
     const [query, setQuery] = useState({});
     const [errorMessage, setErrorMessage] = useState("");
@@ -17,6 +17,8 @@ const Home = () => {
                 );
 
                 setMovies(result.data);
+
+                props.liftHelper(result.data);
 
                 setErrorMessage("");
             } catch (error) {
